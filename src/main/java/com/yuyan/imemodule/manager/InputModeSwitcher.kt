@@ -344,6 +344,9 @@ object InputModeSwitcher {
             CustomConstant.SCHEMA_ZH_T9, CustomConstant.SCHEMA_ZH_STROKE, CustomConstant.SCHEMA_ZH_DOUBLE_LX17 -> KeyEvent.META_CAPS_LOCK_ON
             else -> MASK_CASE_LOWER
         }
+        // #854: 切换键盘/语言后同步 Rime 侧大小写状态, 避免跨输入法重建残留
+        // 过期 META_CAPS_LOCK_ON 导致重新激活输入法时英文被强制大写锁定。
+        Kernel.setCharCase(mToggleStates.modifiers)
     }
 
     /**
