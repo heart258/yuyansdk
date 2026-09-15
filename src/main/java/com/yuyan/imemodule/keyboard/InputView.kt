@@ -371,6 +371,15 @@ class InputView(context: Context, private val service: ImeService) : LifecycleRe
                 textBeforeCursors.clear()
                 commitText(label)
             }
+            // #888 修复:数字键盘(九宫格)布局下,字符键直接提交文本。
+            // 荣耀笔记等部分应用会把传入的硬件 KEYCODE_8 按键误解析为空格;
+            // 数字行之所以正常是因为它走 code=0 -> commitText 直传文本。
+            // 因此在 isNumberSkb 布局下对可打印字符改用 commitText 而非 sendKeyEvent,
+            // 规避应用对硬件数字键事件的差异解析。
+            (InputModeSwitcher.isNumberSkb && label.isNotEmpty()) -> {
+                textBeforeCursors.clear()
+                if (SymbolPreset.containsKey(label)) commitPairSymbol(label) else commitText(label)
+            }
             keyCode != 0 -> sendKeyEvent(keyCode)
             label.isNotEmpty() -> if (SymbolPreset.containsKey(label)) commitPairSymbol(label) else commitText(label)
             else -> result = false
