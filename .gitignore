@@ -15,3 +15,6 @@ gradle/wrapper/
 /build/outputs/
 /build/tmp/
 /build/kspCaches/
+/.cxx/
+# NCNN 预编译构建依赖(90MB),clone 后从官方 releases 下载解压
+/third_party/ncnn-android/

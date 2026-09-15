@@ -75,6 +75,15 @@ android {
         getByName("offline").jniLibs.srcDirs("libs")
     }
 
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1+"
+        }
+    }
+
+    ndkVersion = "30.0.14904198"
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
