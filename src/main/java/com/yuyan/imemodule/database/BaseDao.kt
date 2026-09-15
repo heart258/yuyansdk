@@ -12,7 +12,7 @@ interface BaseDao<T> {
     fun insert(bean: T)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(bean: List<T>)
+    fun insertAll(bean: @JvmSuppressWildcards List<T>)
 
     @Delete
     fun delete(bean:T)

@@ -55,6 +55,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        resValues = true
     }
 
     buildTypes {
@@ -79,6 +80,11 @@ android {
     compileOptions {
         sourceCompatibility 17
         targetCompatibility 17
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
     }
 }
 
