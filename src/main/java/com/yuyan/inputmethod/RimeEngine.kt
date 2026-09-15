@@ -204,15 +204,19 @@ object RimeEngine {
         var composition = getCurrentComposition(candidates)
         when (charCase) {
             KeyEvent.META_SHIFT_ON -> {
-                for (item in showCandidates) item.text = item.text.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                // 仅对 Rime 常规候选(而非常用语等自定义短语)做首字母大写,
+                // 保留用户存储的自定义短语原本大小写(#881)
+                for (index in customPhraseSize until showCandidates.size) showCandidates[index].text = showCandidates[index].text.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 composition = composition.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             }
             KeyEvent.META_CAPS_LOCK_ON -> {
-                for (item in showCandidates) item.text = item.text.uppercase()
+                // 同上:跳过自定义短语,不做全大写转换
+                for (index in customPhraseSize until showCandidates.size) showCandidates[index].text = showCandidates[index].text.uppercase()
                 composition = composition.uppercase()
             }
             else -> {
-                for (item in showCandidates) item.text = item.text.lowercase()
+                // 同上:跳过自定义短语,不做全小写转换(#881 常用语大写信息变小写)
+                for (index in customPhraseSize until showCandidates.size) showCandidates[index].text = showCandidates[index].text.lowercase()
                 composition = composition.lowercase()
             }
         }
