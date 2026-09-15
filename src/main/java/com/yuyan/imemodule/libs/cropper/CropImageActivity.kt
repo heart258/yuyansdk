@@ -14,6 +14,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.yuyan.imemodule.libs.cropper.CropImageView.CropResult
 import com.yuyan.imemodule.libs.cropper.CropImageView.OnCropImageCompleteListener
 import com.yuyan.imemodule.libs.cropper.CropImageView.OnSetImageUriCompleteListener
@@ -54,9 +57,15 @@ open class CropImageActivity : AppCompatActivity(), OnSetImageUriCompleteListene
   }
 
   public override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
     binding = CropImageActivityBinding.inflate(layoutInflater)
+    ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+      val bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+      binding.root.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+      windowInsets
+    }
     setContentView(binding.root)
     setCropImageView(binding.cropImageView)
     val bundle = intent.getBundleExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE)
